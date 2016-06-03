@@ -16,6 +16,10 @@ public class ToyMap {
 
     public boolean canPut (Block block, int [] coordinate) {
         String [][] blockUnits = block.getCurrentBlockUnits();
+        return this.canPut(blockUnits,coordinate);
+    }
+
+    public boolean canPut(String [][] blockUnits, int [] coordinate) {
         int x,y;
         for (int i = 0; i < blockUnits.length; i ++) {
             for (int j = 0; j < blockUnits[i].length; j ++) {
@@ -33,6 +37,10 @@ public class ToyMap {
 
     public void putIntoMap (Block block, int [] coordinate) {
         String [][] blockUnits = block.getCurrentBlockUnits();
+        this.putIntoMap(blockUnits, coordinate);
+    }
+
+    public void putIntoMap (String [][] blockUnits, int [] coordinate) {
         int x,y;
         for (int i = 0; i < blockUnits.length; i ++) {
             for (int j = 0; j < blockUnits[i].length; j ++) {
@@ -45,6 +53,10 @@ public class ToyMap {
 
     public void removeBlock (Block block, int [] coordinate) {
         String [][] blockUnits = block.getCurrentBlockUnits();
+        this.removeBlock(blockUnits, coordinate);
+    }
+
+    public void removeBlock (String [][] blockUnits, int [] coordinate) {
         int x,y;
         for (int i = 0; i < blockUnits.length; i ++) {
             for (int j = 0; j < blockUnits[i].length; j ++) {

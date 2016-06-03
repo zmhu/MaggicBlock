@@ -60,6 +60,10 @@ public class Block {
         return this;
     }
 
+    public Directions getCurrentDirection () {
+        return this.currentDirection;
+    }
+
     Directions [] directions;
     public void setDirections (Directions [] ds) {
         this.directions = ds;
