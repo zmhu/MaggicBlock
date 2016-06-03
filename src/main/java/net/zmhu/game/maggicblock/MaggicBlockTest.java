@@ -9,9 +9,19 @@ public class MaggicBlockTest {
     public static void main (String [] args) {
 
         //testLevel();
-        testMap();
-        testBlockList();
-        testBlock();
+        //testMap();
+        //testBlockList();
+        //testBlock();
+        testMapRun();
+
+    }
+
+    public static void testMapRun () {
+        BlockMap bm = new BlockMap(Level.FOUR);
+        Blocks bls = new Blocks();
+        String [] bs = new String[] {"8","10","2","4"};
+        Map blocks = bls.getBlocks(bs);
+
     }
 
     public static void testBlock () {

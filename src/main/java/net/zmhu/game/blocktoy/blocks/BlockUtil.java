@@ -1,87 +1,40 @@
-package net.zmhu.game.maggicblock;
-
-import java.util.Stack;
+package net.zmhu.game.blocktoy.blocks;
 
 /**
- * Created by zmhu on 5/30/16.
+ * Created by zmhu on 6/1/16.
  */
-public class Block {
-    int blockid;
-    public int getBlockid () {
-        return this.blockid;
-    }
-
-    String [][] block;
-
-    public String [][] getCurrentBlock () {
-        return this.currentBlock;
-    }
-    String [][] currentBlock;
-    public BlockStatus getBlockSatus () {
-        return this.blockSatus;
-    }
-    BlockStatus blockSatus;
-
-    public Block (String [][] block) {
-        this.block = block;
-    }
-
-    public Block (String [][] block, int blockid) {
-        this.block = block;
-        this.blockid = blockid;
-        this.resetBlockDirection();
-    }
-
-    Stack<BlockStatus> blockStatuses = new Stack<BlockStatus>();
-    public void resetBlockDirection () {
-        for (BlockStatus s : BlockStatus.values()) {
-            blockStatuses.push(s);
-        }
-    }
-    public boolean hasNextDirection () {
-        return !this.blockStatuses.empty();
-    }
-    public Block getNextDirection () {
-        this.getBlock(this.blockStatuses.pop());
-        return this;
-    }
-
-    public String [][] getNormalBlock () {
-        return this.block;
-    }
-
-
-    public String [][] getBlock (BlockStatus s) {
-        this.blockSatus = s;
-        switch (this.blockSatus) {
+public class BlockUtil {
+    public static String [][] getBlock (Directions s, String [][] block) {
+        String [][] temp;
+        switch (s) {
 
             case RIGHTROTATE90D:
-                this.currentBlock = getRightRotate90Degrees(this.getNormalBlock());
+                temp = getRightRotate90Degrees(block);
                 break;
             case RIGHTROTATE180D:
-                this.currentBlock = getRightRotate180Degrees(this.getNormalBlock());
+                temp = getRightRotate180Degrees(block);
                 break;
             case LEFTROTATE90D:
-                this.currentBlock = getLeftRotate90Degrees(this.getNormalBlock());
+                temp = getLeftRotate90Degrees(block);
                 break;
             case TURNOVER:
-                this.currentBlock = getTurnOverBlock(this.getNormalBlock());
+                temp = getTurnOverBlock(block);
                 break;
             case TURNOVERANDRIGHTROTATE90D:
-                this.currentBlock = getTurnOverAndRightRotate90Degrees(this.getNormalBlock());
+                temp = getTurnOverAndRightRotate90Degrees(block);
                 break;
             case TURNOVERRIGHTROTATE180D:
-                this.currentBlock = getTurnOverAndRightRotate180Degrees(this.getNormalBlock());
+                temp = getTurnOverAndRightRotate180Degrees(block);
                 break;
             case TURNOVERANDLEFTROTATE90D:
-                this.currentBlock = getTurnOverAndLeftRotate90Degrees(this.getNormalBlock());
+                temp = getTurnOverAndLeftRotate90Degrees(block);
                 break;
             case NORMAL:
             default:
-                this.currentBlock = this.getNormalBlock();
+                temp = block;
 
         }
-        return this.currentBlock;
+        return temp;
     }
 
 
@@ -136,11 +89,6 @@ public class Block {
             }
         }
         return temp;
-    }
-
-    public static void printBlock (Block block) {
-        System.out.println("block id:" + block.getBlockid());
-        printBlock(block.getCurrentBlock());
     }
 
     public static void printBlock (String [][] block) {

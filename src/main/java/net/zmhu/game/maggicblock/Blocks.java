@@ -1,17 +1,29 @@
 package net.zmhu.game.maggicblock;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-/**
- * Created by zmhu on 5/30/16.
- */
 public class Blocks {
 
     Map<Integer,String[][]> blocks = new HashMap<Integer,String[][]>();
 
     public Blocks () {
         this.initBlocks();
+    }
+
+    public Map<Integer,Block> getBlocks (String [] a) {
+        Map<Integer,Block> bs = new HashMap<Integer, Block>();
+        List<String> l = Arrays.asList(a);
+        for (int i: this.blocks.keySet()) {
+            System.out.println("l:" + l + " ,i: "+i);
+            if (l.contains(String.valueOf(i))) {
+                bs.put(i, new Block(this.blocks.get(i), i));
+                System.out.println("put :" + i);
+            }
+        }
+        return bs;
     }
 
     public Map<Integer,String[][]> getBlockList () {
