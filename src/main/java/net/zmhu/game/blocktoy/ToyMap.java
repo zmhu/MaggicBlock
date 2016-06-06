@@ -20,12 +20,16 @@ public class ToyMap {
     }
 
     public boolean canPut(String [][] blockUnits, int [] coordinate) {
+        return this.isInMap(blockUnits, coordinate);
+    }
+
+    public boolean isInMap (String [][] blockUnits, int [] coordinate ) {
         int x,y;
         for (int i = 0; i < blockUnits.length; i ++) {
             for (int j = 0; j < blockUnits[i].length; j ++) {
                 x = coordinate[0] + i;
                 y = coordinate[1] + j;
-                if (x >= 0 && y >= 0 && x < rows && y < this.level.getValue() && this.map[x][y].equals("0")) {
+                if (x >= 0 && y >= 0 && x < rows && y < this.level.getValue()) {
                     continue;
                 } else {
                     return false;
@@ -35,20 +39,38 @@ public class ToyMap {
         return true;
     }
 
+    public boolean isFull () {
+        boolean isFull = true;
+        for (int i = 0; i < this.map.length; i ++) {
+            for (int j = 0; j < this.map[i].length; j ++) {
+                if (this.map[i][j].equals("0")) {
+                    isFull = false;
+                }
+            }
+        }
+        return isFull;
+    }
+
     public void putIntoMap (Block block, int [] coordinate) {
         String [][] blockUnits = block.getCurrentBlockUnits();
         this.putIntoMap(blockUnits, coordinate);
     }
 
-    public void putIntoMap (String [][] blockUnits, int [] coordinate) {
+    public boolean putIntoMap (String [][] blockUnits, int [] coordinate) {
         int x,y;
         for (int i = 0; i < blockUnits.length; i ++) {
             for (int j = 0; j < blockUnits[i].length; j ++) {
                 x = coordinate[0] + i;
                 y = coordinate[1] + j;
-                this.map[x][y] = blockUnits[i][j];
+                if (!blockUnits[i][j].equals("0") && !this.map[x][y].equals("0")) {
+                    return false;
+                }
+                if (!blockUnits[i][j].equals("0")) {
+                    this.map[x][y] = blockUnits[i][j];
+                }
             }
         }
+        return true;
     }
 
     public void removeBlock (Block block, int [] coordinate) {
@@ -67,15 +89,19 @@ public class ToyMap {
         }
     }
 
-
-    String [][] map;
-    public void initMap () {
-        this.map = new String[rows][this.level.getValue()];
+    public void clearMap () {
         for (int i = 0; i < this.map.length; i ++) {
             for (int j = 0; j < this.map[i].length; j ++) {
                 this.map[i][j] = "0";
             }
         }
+    }
+
+
+    String [][] map;
+    public void initMap () {
+        this.map = new String[rows][this.level.getValue()];
+        this.clearMap();
     }
 
     public void printMap () {

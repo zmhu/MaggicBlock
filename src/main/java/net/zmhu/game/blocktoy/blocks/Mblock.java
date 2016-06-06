@@ -32,6 +32,16 @@ public class Mblock {
         this.y = y;
     }
 
+    public void printBlock () {
+        System.out.println("Coordinate: " + this.x + ", " + this.y);
+        for (int i = 0; i < this.blockUnits.length; i ++) {
+            for (int j = 0; j < this.blockUnits[i].length; j ++) {
+                System.out.print(this.blockUnits[i][j]);
+            }
+            System.out.println();
+        }
+    }
+
     public int [] getCoordinate () {
         return new int[] {this.x,this.y};
     }

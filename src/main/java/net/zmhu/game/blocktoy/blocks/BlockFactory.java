@@ -27,6 +27,7 @@ public class BlockFactory {
             //bs.put()
             b = this.blocks.get(idarr[i]);
             bs.put(b.getBlockId(),b);
+            b.printCurrent();
         }
         return bs;
     }

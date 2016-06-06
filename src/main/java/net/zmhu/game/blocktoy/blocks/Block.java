@@ -68,6 +68,24 @@ public class Block {
     public void setDirections (Directions [] ds) {
         this.directions = ds;
     }
+    public void setDirections1 (Directions [] ds) {
+        //this.directions = ds;
+        Directions [] d  = new Directions[ds.length];
+        int j = 0;
+        for (int i = 0; i < ds.length; i ++) {
+            if (ds[i].getValue() <= 4) {
+                d[i] = ds[i];
+                j ++;
+            }
+        }
+        this.directions = new Directions[j];
+        for (int i = 0, k = 0; i < d.length; i ++) {
+            if (d[i] != null) {
+                this.directions[k] = d[i];
+                k ++;
+            }
+        }
+    }
 
     int cursor = -1;
     /**
