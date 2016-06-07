@@ -13,6 +13,19 @@ public class Mblock {
         this.blockId = blockId;
     }
 
+    public int hashCode () {
+        int bid = this.blockId;
+        int x = this.x;
+        int y = this.y;
+        int d = this.direction.getValue();
+        int hc = 0;
+        hc += bid << 16;
+        hc += x << 10;
+        hc += y << 5;
+        hc += d;
+        return hc;
+    }
+
     public String [][] getBlockUnits () {
         return this.blockUnits;
     }

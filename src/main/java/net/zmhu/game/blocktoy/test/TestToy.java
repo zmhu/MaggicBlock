@@ -53,7 +53,7 @@ public class TestToy {
         bl4.setCoordinate(ct4[0],ct4[1]);
         _mblocks.push(bl4);
         BlockToy bt = new BlockToy(Level.FOUR,new int[]{2,8,10,4});
-        bt.tryPutOneGroup(_mblocks);
+        //bt.tryPutOneGroup(_mblocks);
 
 
 

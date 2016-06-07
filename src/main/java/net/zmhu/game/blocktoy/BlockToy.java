@@ -17,42 +17,64 @@ public class BlockToy {
         this.map = new ToyMap(level);
         System.out.println("init map");
         this.map.printMap();
-        //{"8","10","2","4"}
         this.blocks = BlockFactory.getInstance().getBlocks(blocks);
         this.initAllBlocks();
         this.blockSelector = new BlockSelector(this.mblocks);
     }
-
     BlockSelector blockSelector;
 
-    Stack<Mblock> oneGroup = new Stack<Mblock>();
+    int tryCount = 0;
     public void work () {
-        int key = this.mblocks.keySet().iterator().next();
-        List<Mblock> firstBlocks = this.mblocks.get(key);
-        this.mblocks.remove(key);
-        //System.out.println("First Blocks :" + firstBlocks.size());
         while (this.blockSelector.hasNextGroup()) {
-            this.tryPutOneGroup(this.blockSelector.nextGroup());
+            //this.tryPutOneGroup(this.blockSelector.nextGroup(),this.map);//1474560
+            this.tryPutAGroup(this.blockSelector.nextGroupWithPattern(),this.map);//1129582
+            tryCount ++;
         }
+        System.out.print("Try Count: " + this.tryCount);
+        System.out.println("\tSuccess Count: " + this.successCount);
     }
 
-    public boolean tryPutOneGroup (Stack<Mblock> oneGroup) {
+    int successCount = 0;
+
+    public boolean tryPutAGroup (List<Mblock> aGroup, ToyMap _map) {
         Mblock _mblock;
         boolean bl = false;
-        while (!oneGroup.empty()) {
-            _mblock = oneGroup.pop();
-            if (!this.map.putIntoMap(_mblock.getBlockUnits(), _mblock.getCoordinate())) {
+        if (aGroup == null) return false;
+        for (int i=0 ; i < aGroup.size(); i ++ ) {
+            _mblock = aGroup.get(i);
+            if (!_map.putIntoMap(_mblock.getBlockUnits(), _mblock.getCoordinate())) {
                 bl = false;
                 break;
             }
         }
-        if (this.map.isFull()) {
+        if (_map.isFull()) {
+            System.out.println("SuccessFul!");
+            _map.printMap();
+            bl = true;
+            this.successCount ++;
+        }
+        aGroup.clear();
+        _map.clearMap();
+        return bl;
+    }
+
+    public boolean tryPutOneGroup (Stack<Mblock> oneGroup, ToyMap _map) {
+        Mblock _mblock;
+        boolean bl = false;
+        while (!oneGroup.empty()) {
+            _mblock = oneGroup.pop();
+            if (!_map.putIntoMap(_mblock.getBlockUnits(), _mblock.getCoordinate())) {
+                bl = false;
+                break;
+            }
+        }
+        if (_map.isFull()) {
             System.out.println("Successful!");
-            this.map.printMap();
+            _map.printMap();
             bl = true;
         }
         oneGroup.clear();
-        this.map.clearMap();
+        _map.clearMap();
         return bl;
     }
 
@@ -69,15 +91,20 @@ public class BlockToy {
                 for (i = 0; i < this.map.map.length; i++) {
                     for (j = 0; j < this.map.map[i].length; j++) {
                         if (this.map.isInMap(b.getCurrentBlockUnits(), new int[]{i,j})) {
-                            mblock = new Mblock(b.getCurrentBlockUnits().clone(), b.getBlockId());
-                            mblock.setCoordinate(i, j);
-                            mblock.setDirection(b.getCurrentDirection());
-                            oneblocks.add(mblock);
+                            if (this.map.hasPutAngle(b.getCurrentBlockUnits(), new int[]{i,j})) {
+                                if (this.map.hasPutSide(b.getBlockId(),b.getCurrentDirection(),new int[] {i,j})) {
+                                    mblock = new Mblock(b.getCurrentBlockUnits().clone(), b.getBlockId());
+                                    mblock.setCoordinate(i, j);
+                                    mblock.setDirection(b.getCurrentDirection());
+                                    oneblocks.add(mblock);
+                                }
+                            }
                         }
                     }
                 }
             }
             this.mblocks.put(b.getBlockId(), oneblocks);
+            System.out.println("block id: " + b.getBlockId() + ", count: " + oneblocks.size());
         }
         System.out.println("Init mblocks done");
     }
@@ -85,16 +112,22 @@ public class BlockToy {
     public static void main (String [] args) {
         Level _level;
         int [] _bs;
+        //_level = Level.FOUR;
+        //_bs = new int[] {8,10,2,4};
         /*
-        _level = Level.FOUR;
-        _bs = new int[] {8,10,2,4};
-        */
         _level = Level.SIX;
         _bs = new int[] {8,11,4,3,9,1};
-        /*
         _level = Level.TWELEVE;
         _bs = new int[] {1,2,3,4,5,6,7,8,9,10,11,12};
         */
+
+        //Try Count: 180674269	Success Count: 22
+        //Try Count: 441471042, Success Count: 24
+        //Try Count: 305770410	Success Count: 22
+        //Try Count: 635830272	Success Count: 24
+        _level = Level.FIVE;
+        _bs = new int[] {8,12,9,4,3};
+
 
         BlockToy blockToy = new BlockToy(_level, _bs);
         blockToy.work();
