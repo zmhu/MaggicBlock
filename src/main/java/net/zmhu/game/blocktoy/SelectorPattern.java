@@ -2,44 +2,10 @@ package net.zmhu.game.blocktoy;
 
 import net.zmhu.game.blocktoy.blocks.Mblock;
 
-import java.util.List;
-
-/**
- * Created by zmhu on 6/7/16.
- */
 public class SelectorPattern {
 
-    List<Mblock> mblockList;
-    Mblock currentMblock;
-    public SelectorPattern (List<Mblock> mblockList, Mblock _mblock) {
-        this.currentMblock = _mblock;
-        this.mblockList = mblockList;
-    }
-
-    public boolean maybeNotFit () {
-        Mblock _mblock;
-
-        /*
-        for (int i = 0; i < this.mblockList.size(); i ++) {
-            _mblock = this.mblockList.get(i);
-
-            //起始点位置一样,并且都有内容
-            if (this.mblockCoordinateEquals(_mblock, this.currentMblock))  return true;
-
-            //方块之间是否有覆盖
-            //if (this.isOverlapBlock(_mblock, this.currentMblock)) return true;
-
-        }*/
-        //if (this.mblockList.size() > 1) {
-            //if (this.isOverlapBlock(this.mblockList.get(this.mblockList.size() - 1), this.currentMblock)) return true;
-        //}
-        //if (this.mblockCoordinateEquals(this.mblockList.get(this.mblockList.size() - 1), this.currentMblock))  return true;
-        if (this.isOverlapBlock(this.mblockList.get(this.mblockList.size() - 1), this.currentMblock)) return true;
-        return false;
-    }
-
-
-    private boolean isOverlapBlock (Mblock m1, Mblock _m) {
+    // 判断两块是否有可能覆盖
+    public boolean isOverlapBlock (Mblock m1, Mblock _m) {
         String [][] m1Units = m1.getBlockUnits();
         int [] c1 = m1.getCoordinate();
         int [] mapC = new int[2];

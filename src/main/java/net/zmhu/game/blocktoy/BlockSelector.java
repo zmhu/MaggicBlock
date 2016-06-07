@@ -40,7 +40,7 @@ public class BlockSelector {
     }
     List<Mblock> aGroup = new ArrayList<Mblock>();
     public List<Mblock> nextGroupWithPattern () {
-        if (this.cursor[0][0] > this.cursor[0][1])
+        if (this.cursor[0][0] >= this.cursor[0][1])
             return null;
         this.selectBlockWithPattern(0);
         this.moveCursor(this.cursor.length - 1);
@@ -51,33 +51,35 @@ public class BlockSelector {
         }
     }
 
-    SelectorPattern selectorPattern;
+    SelectorPattern selectorPattern = new SelectorPattern();
     protected void selectBlockWithPattern (int row) {
         Mblock _mblock;
         if (this.cursor[0][0] >= this.cursor[0][1])
             return;
-        if (row >= (this.cursor.length )) {
-            return;
-        } else {
+        if (row < this.cursor.length ) {
             _mblock = this.selectOneBlock(row, this.cursor[row][0]);
-            if (row > 0 && row < (this.cursor.length - 1) && !this.maybeFit(_mblock)) {
+            if (row > 0 && row < (this.cursor.length - 1) && this.isOverlapBlock(this.aGroup,_mblock)) {
                 this.moveCursor(row);
                 this.resetLowerCursor(row);
                 this.aGroup.clear();
                 this.selectBlockWithPattern(0);
             } else {
                 this.aGroup.add(_mblock);
+                this.selectBlockWithPattern(row + 1);
             }
-            this.selectBlockWithPattern(row + 1);
         }
     }
 
-    protected boolean maybeFit (Mblock mblock) {
-        this.selectorPattern = new SelectorPattern(this.aGroup,mblock);
-        if (this.selectorPattern.maybeNotFit()) {
-            return false;
+    protected boolean isOverlapBlock (List<Mblock> _aGroup ,Mblock mblock) {
+        if (this.selectorPattern.isOverlapBlock(_aGroup.get(_aGroup.size() - 1), mblock)) {
+            return true;
         }
-        return true;
+        if (_aGroup.size() >= 2) {
+            if (this.selectorPattern.isOverlapBlock(_aGroup.get(_aGroup.size() - 2), mblock)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     Stack<Mblock> oneGroup = new Stack<Mblock>();

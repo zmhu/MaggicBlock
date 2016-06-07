@@ -115,8 +115,6 @@ public class BlockToy {
         //_level = Level.FOUR;
         //_bs = new int[] {8,10,2,4};
         /*
-        _level = Level.SIX;
-        _bs = new int[] {8,11,4,3,9,1};
         _level = Level.TWELEVE;
         _bs = new int[] {1,2,3,4,5,6,7,8,9,10,11,12};
         */
@@ -125,8 +123,15 @@ public class BlockToy {
         //Try Count: 441471042, Success Count: 24
         //Try Count: 305770410	Success Count: 22
         //Try Count: 635830272	Success Count: 24
-        _level = Level.FIVE;
-        _bs = new int[] {8,12,9,4,3};
+        //Try Count: 28314113	Success Count: 24
+        //Try Count: 1814529	Success Count: 24
+        //_level = Level.FIVE;
+        //_bs = new int[] {8,12,9,4,3};
+
+        //Try Count: 1008307697	Success Count: 64
+        //Try Count: 50826865	Success Count: 64
+        _level = Level.SIX;
+        _bs = new int[] {8,11,4,3,9,1};
 
 
         BlockToy blockToy = new BlockToy(_level, _bs);
