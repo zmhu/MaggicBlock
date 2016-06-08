@@ -17,6 +17,10 @@ public class BlockSelector {
         this.initBlocks();
     }
 
+    public void savePatterns () {
+        this.selectorPattern.savePatterns();
+    }
+
     public synchronized Stack<Mblock> nextGroupWithThread () {
         if (this.hasNextGroup())
             return nextGroup();
@@ -34,7 +38,7 @@ public class BlockSelector {
 
     public void printCursor () {
         for (int i = 0; i < this.cursor.length; i ++) {
-            if (i == 0)
+            //if (i == 0)
                 System.out.println("row = " + i + ", cursor = " + this.cursor[i][0] + ", max = " + this.cursor[i][1]);
         }
     }
@@ -42,7 +46,8 @@ public class BlockSelector {
     public List<Mblock> nextGroupWithPattern () {
         if (this.cursor[0][0] >= this.cursor[0][1])
             return null;
-        this.selectBlockWithPattern(0);
+        //this.selectBlockWithPattern(0);
+        this.selectBlockWithPatters();
         this.moveCursor(this.cursor.length - 1);
         if (this.aGroup.size() > 2) {
             return this.aGroup;
@@ -58,7 +63,7 @@ public class BlockSelector {
             return;
         if (row < this.cursor.length ) {
             _mblock = this.selectOneBlock(row, this.cursor[row][0]);
-            if (row > 0 && row < (this.cursor.length - 1) && this.isOverlapBlock(this.aGroup,_mblock)) {
+            if (row > 0 && row < (this.cursor.length - 1) && this.isOverlapBlock(this.aGroup,_mblock,row)) {
                 this.moveCursor(row);
                 this.resetLowerCursor(row);
                 this.aGroup.clear();
@@ -70,12 +75,49 @@ public class BlockSelector {
         }
     }
 
-    protected boolean isOverlapBlock (List<Mblock> _aGroup ,Mblock mblock) {
-        if (this.selectorPattern.isOverlapBlock(_aGroup.get(_aGroup.size() - 1), mblock)) {
+    protected void selectBlockWithPatters () {
+        Mblock _mblock;
+        boolean ct = true;
+        int i = 0;
+        while (i < this.cursor.length) {
+            //System.out.print("i="+i);this.printCursor();
+            if (this.cursor[i][0] < this.cursor[i][1]) {
+                _mblock = this.selectOneBlock(i, this.cursor[i][0]);
+                if (i > 0 && this.isOverlapBlock(this.aGroup, _mblock, i)) {
+                    this.moveCursor(i);
+                    this.resetLowerCursor(i);
+                    this.aGroup.clear();
+                    i = 0;
+                } else {
+                    this.aGroup.add(_mblock);
+                    i ++;
+                }
+            }
+            if (this.cursor[0][0] >= this.cursor[0][1]) {
+                break;
+            }
+        }
+    }
+
+    protected boolean isOverlapBlock (List<Mblock> _aGroup ,Mblock mblock , int i) {
+        /*
+        for (int j =0; j < (i - 1); j ++) {
+            if (this.selectorPattern.isOverlapBlock(_aGroup.get(j), mblock)) {
+                return true;
+            }
+        }*/
+        if (this.selectorPattern.isOverlapBlock(_aGroup.get(i - 1), mblock)) {
             return true;
         }
-        if (_aGroup.size() >= 2) {
-            if (this.selectorPattern.isOverlapBlock(_aGroup.get(_aGroup.size() - 2), mblock)) {
+
+        if (i >= 2) {
+            if (this.selectorPattern.isOverlapBlock(_aGroup.get(i-2), mblock)) {
+                return true;
+            }
+        }
+
+        if (i >= 3) {
+            if (this.selectorPattern.isOverlapBlock(_aGroup.get(i-3), mblock)) {
                 return true;
             }
         }

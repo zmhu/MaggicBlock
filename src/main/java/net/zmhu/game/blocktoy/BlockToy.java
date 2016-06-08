@@ -32,6 +32,7 @@ public class BlockToy {
         }
         System.out.print("Try Count: " + this.tryCount);
         System.out.println("\tSuccess Count: " + this.successCount);
+        this.blockSelector.savePatterns();
     }
 
     int successCount = 0;
@@ -125,13 +126,19 @@ public class BlockToy {
         //Try Count: 635830272	Success Count: 24
         //Try Count: 28314113	Success Count: 24
         //Try Count: 1814529	Success Count: 24
+        //Try Count: 167229441	Success Count: 24
         //_level = Level.FIVE;
         //_bs = new int[] {8,12,9,4,3};
 
         //Try Count: 1008307697	Success Count: 64
         //Try Count: 50826865	Success Count: 64
         _level = Level.SIX;
-        _bs = new int[] {8,11,4,3,9,1};
+        //_bs = new int[] {8,11,4,3,9,1};
+        //_bs = new int[] {12,4,6,8,11,7};//A
+        //_bs = new int[] {9,8,10,12,7,4};//B
+        //_bs = new int[] {12,3,8,4,9,10};//C
+        _bs = new int[] {4,8,10,9,3,2};//D
+        //_bs = new int[] {12,9,3,7,10,6};//E
 
 
         BlockToy blockToy = new BlockToy(_level, _bs);

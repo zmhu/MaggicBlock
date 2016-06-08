@@ -8,12 +8,15 @@ public class Mblock {
     int blockId;
     int x,y;
     Directions direction;
+    private int _hashCode = 0;
     public Mblock(String [][] blockUnits, int blockId) {
         this.blockUnits = blockUnits;
         this.blockId = blockId;
     }
 
     public int hashCode () {
+        if (this._hashCode != 0)
+            return this._hashCode;
         int bid = this.blockId;
         int x = this.x;
         int y = this.y;
@@ -23,7 +26,9 @@ public class Mblock {
         hc += x << 10;
         hc += y << 5;
         hc += d;
-        return hc;
+        this._hashCode = hc;
+
+        return this._hashCode;
     }
 
     public String [][] getBlockUnits () {

@@ -2,10 +2,51 @@ package net.zmhu.game.blocktoy;
 
 import net.zmhu.game.blocktoy.blocks.Mblock;
 
+import java.io.*;
+
 public class SelectorPattern {
+    String fileName = "p.ser";
+    PattersSerializ _patterns;// = new PattersSerializ();
+    public SelectorPattern () {
+        this.initPatters();
+    }
+
+    public void savePatterns () {
+        try{
+            FileOutputStream fs = new FileOutputStream(this.fileName);
+            ObjectOutputStream os =  new ObjectOutputStream(fs);
+            os.writeObject(this._patterns);
+            os.close();
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+    }
+
+    private void initPatters () {
+        try {
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(this.fileName)));
+            this._patterns = (PattersSerializ)ois.readObject();
+            System.out.println("init cache :" +this._patterns.size());
+        } catch (Exception e) {
+            //e.printStackTrace();
+            this._patterns = new PattersSerializ();
+        }
+    }
+
+    public boolean isOverlapBlock (Mblock m1, Mblock _m) {
+        //return this.isOverlapBlockCal(m1, _m);
+        boolean b;
+        b = this._patterns.isMutex(m1.hashCode(), _m.hashCode());
+        if (!b) {
+            b = this.isOverlapBlockCal(m1, _m);
+            if (b)
+                this._patterns.add(m1.hashCode(), _m.hashCode());
+        }
+        return b;
+    }
 
     // 判断两块是否有可能覆盖
-    public boolean isOverlapBlock (Mblock m1, Mblock _m) {
+    public boolean isOverlapBlockCal (Mblock m1, Mblock _m) {
         String [][] m1Units = m1.getBlockUnits();
         int [] c1 = m1.getCoordinate();
         int [] mapC = new int[2];
